@@ -2,8 +2,9 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
+import { PaperProvider } from 'react-native-paper';
+import { AuthProvider } from '../src/context/AuthContext';
+import { BookProvider } from '../src/context/BookContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function RootLayout() {
@@ -19,11 +20,27 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
+      <PaperProvider>
+        <AuthProvider>
+          <BookProvider>
+            <Stack
+              screenOptions={{
+                headerStyle: {
+                  backgroundColor: '#6200ee',
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                  fontWeight: 'bold',
+                },
+              }}
+            >
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style="auto" />
+          </BookProvider>
+        </AuthProvider>
+      </PaperProvider>
     </ThemeProvider>
   );
 }
